@@ -1,0 +1,1233 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gabriel Bifon — Analista de Dados</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:ital,wght@0,400;0,500;1,400&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #07090f;
+    --surface: #0e1118;
+    --surface2: #141820;
+    --border: #1a2035;
+    --accent: #f77600;
+    --accent2: #003d7a;
+    --accent3: #ff9533;
+    --text: #e8eaf0;
+    --muted: #5a6280;
+    --highlight: #f77600;
+    --itau-orange: #f77600;
+    --itau-blue: #003d7a;
+    --itau-light-blue: #1a5fa8;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 16px;
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
+
+  /* ── NOISE OVERLAY ── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 1000;
+    opacity: 0.5;
+  }
+
+  /* ── GRID BACKGROUND ── */
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(247, 118, 0, 0.025) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0, 61, 122, 0.04) 1px, transparent 1px);
+    background-size: 60px 60px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.2rem 3rem;
+    background: rgba(10, 12, 16, 0.85);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .nav-logo {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 1.1rem;
+    letter-spacing: -0.02em;
+    color: var(--itau-orange);
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 2.5rem;
+    list-style: none;
+  }
+
+  .nav-links a {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--muted);
+    text-decoration: none;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    transition: color 0.2s;
+  }
+
+  .nav-links a:hover { color: var(--itau-orange); }
+
+  .nav-cta {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.75rem;
+    color: #fff;
+    background: var(--itau-orange);
+    padding: 0.5rem 1.2rem;
+    border-radius: 4px;
+    text-decoration: none;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    transition: opacity 0.2s;
+  }
+
+  .nav-cta:hover { opacity: 0.85; }
+
+  /* ── HERO ── */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    padding: 6rem 3rem 4rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-glow {
+    position: absolute;
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, rgba(247, 118, 0, 0.12) 0%, transparent 70%);
+    top: -100px;
+    right: -100px;
+    pointer-events: none;
+  }
+
+  .hero-glow2 {
+    position: absolute;
+    width: 400px;
+    height: 400px;
+    background: radial-gradient(circle, rgba(0, 61, 122, 0.12) 0%, transparent 70%);
+    bottom: 0;
+    left: 10%;
+    pointer-events: none;
+  }
+
+  .hero-content {
+    max-width: 1100px;
+    margin: 0 auto;
+    width: 100%;
+    position: relative;
+    z-index: 1;
+  }
+
+  .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    color: var(--itau-orange);
+    background: rgba(247, 118, 0, 0.08);
+    border: 1px solid rgba(247, 118, 0, 0.25);
+    padding: 0.4rem 0.9rem;
+    border-radius: 100px;
+    margin-bottom: 2rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    animation: fadeUp 0.6s ease both;
+  }
+
+  .hero-badge::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--itau-orange);
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+  }
+
+  .hero-name {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: clamp(3rem, 8vw, 6.5rem);
+    line-height: 0.95;
+    letter-spacing: -0.04em;
+    margin-bottom: 1.5rem;
+    animation: fadeUp 0.7s 0.1s ease both;
+  }
+
+  .hero-name span {
+    display: block;
+    background: linear-gradient(135deg, var(--itau-orange) 0%, #ff9533 50%, var(--itau-light-blue) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .hero-role {
+    font-family: 'DM Mono', monospace;
+    font-size: 1rem;
+    color: var(--muted);
+    margin-bottom: 2.5rem;
+    animation: fadeUp 0.7s 0.2s ease both;
+  }
+
+  .hero-role em {
+    color: var(--itau-orange);
+    font-style: normal;
+  }
+
+  .hero-desc {
+    max-width: 620px;
+    font-size: 1.05rem;
+    color: #8090b0;
+    line-height: 1.8;
+    margin-bottom: 3rem;
+    animation: fadeUp 0.7s 0.3s ease both;
+  }
+
+  .hero-actions {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    animation: fadeUp 0.7s 0.4s ease both;
+  }
+
+  .btn-primary {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.82rem;
+    color: #fff;
+    background: var(--itau-orange);
+    padding: 0.9rem 2rem;
+    border-radius: 6px;
+    text-decoration: none;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    transition: all 0.2s;
+    font-weight: 500;
+  }
+
+  .btn-primary:hover {
+    background: #ff8c1a;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 30px rgba(247, 118, 0, 0.35);
+  }
+
+  .btn-secondary {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.82rem;
+    color: var(--itau-orange);
+    background: transparent;
+    border: 1px solid rgba(247, 118, 0, 0.35);
+    padding: 0.9rem 2rem;
+    border-radius: 6px;
+    text-decoration: none;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    transition: all 0.2s;
+  }
+
+  .btn-secondary:hover {
+    border-color: var(--itau-orange);
+    background: rgba(247, 118, 0, 0.07);
+    transform: translateY(-2px);
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── SECTION BASE ── */
+  section {
+    padding: 6rem 3rem;
+    position: relative;
+    z-index: 1;
+  }
+
+  .section-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    color: var(--itau-orange);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+  }
+
+  .section-label::before {
+    content: '';
+    width: 2rem;
+    height: 1px;
+    background: var(--itau-orange);
+  }
+
+  .section-title {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: clamp(1.8rem, 4vw, 2.8rem);
+    letter-spacing: -0.03em;
+    line-height: 1.1;
+    margin-bottom: 1rem;
+  }
+
+  .section-subtitle {
+    color: var(--muted);
+    font-size: 1rem;
+    max-width: 580px;
+    margin-bottom: 4rem;
+  }
+
+  .container {
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  /* ── STORYTELLING / TIMELINE ── */
+  #story { background: var(--surface); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+
+  .timeline {
+    position: relative;
+    padding-left: 2rem;
+  }
+
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 8px;
+    bottom: 8px;
+    width: 1px;
+    background: linear-gradient(to bottom, var(--itau-orange), var(--itau-light-blue), var(--itau-orange));
+    opacity: 0.35;
+  }
+
+  .timeline-item {
+    position: relative;
+    padding: 0 0 3.5rem 2.5rem;
+    opacity: 0;
+    transform: translateX(-20px);
+    transition: all 0.5s ease;
+  }
+
+  .timeline-item.visible {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  .timeline-item::before {
+    content: '';
+    position: absolute;
+    left: -0.35rem;
+    top: 8px;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--itau-orange);
+    box-shadow: 0 0 12px rgba(247, 118, 0, 0.6);
+  }
+
+  .timeline-item:nth-child(2)::before { background: var(--itau-light-blue); box-shadow: 0 0 12px rgba(26, 95, 168, 0.7); }
+  .timeline-item:nth-child(3)::before { background: var(--itau-orange); box-shadow: 0 0 12px rgba(247, 118, 0, 0.5); }
+  .timeline-item:nth-child(4)::before { background: var(--itau-light-blue); box-shadow: 0 0 12px rgba(26, 95, 168, 0.7); }
+  .timeline-item:nth-child(5)::before { background: var(--itau-orange); box-shadow: 0 0 12px rgba(247, 118, 0, 0.6); }
+
+  .tl-period {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--muted);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 0.4rem;
+  }
+
+  .tl-title {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 1.3rem;
+    letter-spacing: -0.02em;
+    margin-bottom: 0.3rem;
+  }
+
+  .tl-company {
+    font-size: 0.85rem;
+    color: var(--itau-orange);
+    margin-bottom: 0.8rem;
+    font-family: 'DM Mono', monospace;
+  }
+
+  .tl-text {
+    color: #7080a0;
+    font-size: 0.95rem;
+    line-height: 1.75;
+    max-width: 620px;
+  }
+
+  .tl-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin-top: 1rem;
+  }
+
+  .tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--muted);
+    background: var(--border);
+    padding: 0.2rem 0.6rem;
+    border-radius: 3px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    border: 1px solid var(--border);
+    transition: all 0.2s;
+  }
+
+  .tag:hover {
+    color: var(--itau-orange);
+    border-color: rgba(247, 118, 0, 0.35);
+    background: rgba(247, 118, 0, 0.06);
+  }
+
+  .tag.highlight {
+    color: var(--itau-orange);
+    border-color: rgba(247, 118, 0, 0.28);
+    background: rgba(247, 118, 0, 0.07);
+  }
+
+  /* ── SKILLS DASHBOARD ── */
+  #skills { background: var(--bg); }
+
+  .skills-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .skill-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.8rem;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 0.4s ease;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .skill-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--itau-orange), var(--itau-light-blue));
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+
+  .skill-card:hover::before { opacity: 1; }
+  .skill-card:hover { border-color: rgba(247, 118, 0, 0.2); transform: translateY(-4px); box-shadow: 0 20px 40px rgba(0,0,0,0.3); }
+
+  .skill-card.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .skill-card-header {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    margin-bottom: 1.2rem;
+  }
+
+  .skill-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    flex-shrink: 0;
+  }
+
+  .skill-card-title {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 1rem;
+    letter-spacing: -0.01em;
+  }
+
+  .skill-items {
+    display: flex;
+    flex-direction: column;
+    gap: 0.7rem;
+  }
+
+  .skill-bar-row {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+  }
+
+  .skill-bar-label {
+    display: flex;
+    justify-content: space-between;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    color: var(--muted);
+    letter-spacing: 0.03em;
+  }
+
+  .skill-bar-label span:last-child {
+    color: var(--itau-orange);
+  }
+
+  .skill-bar-track {
+    height: 3px;
+    background: var(--border);
+    border-radius: 100px;
+    overflow: hidden;
+  }
+
+  .skill-bar-fill {
+    height: 100%;
+    border-radius: 100px;
+    width: 0%;
+    transition: width 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .soft-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .soft-pill {
+    font-size: 0.8rem;
+    color: #8090b0;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    padding: 0.35rem 0.8rem;
+    border-radius: 100px;
+    transition: all 0.2s;
+  }
+
+  .soft-pill:hover {
+    color: var(--text);
+    border-color: rgba(0, 212, 255, 0.3);
+  }
+
+  /* ── ITAÚ MATCH ── */
+  #match {
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .match-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1rem;
+  }
+
+  .match-item {
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1.2rem;
+    transition: all 0.2s;
+    opacity: 0;
+    transform: translateY(16px);
+    transition: all 0.4s ease;
+  }
+
+  .match-item.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .match-item:hover {
+    border-color: rgba(247, 118, 0, 0.25);
+    box-shadow: 0 0 20px rgba(247, 118, 0, 0.05);
+  }
+
+  .match-check {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: rgba(247, 118, 0, 0.1);
+    border: 1px solid rgba(247, 118, 0, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    font-size: 0.75rem;
+    color: var(--itau-orange);
+    margin-top: 0.1rem;
+  }
+
+  .match-text strong {
+    font-family: 'Syne', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 700;
+    display: block;
+    margin-bottom: 0.2rem;
+    letter-spacing: -0.01em;
+  }
+
+  .match-text p {
+    font-size: 0.82rem;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+
+  /* ── CONTACT ── */
+  #contact { background: var(--bg); text-align: center; }
+
+  .contact-card {
+    max-width: 600px;
+    margin: 0 auto;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 3rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .contact-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 50% 0%, rgba(247, 118, 0, 0.07), transparent 60%);
+    pointer-events: none;
+  }
+
+  .contact-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.8rem;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    margin-bottom: 0.8rem;
+  }
+
+  .contact-sub {
+    color: var(--muted);
+    font-size: 0.9rem;
+    margin-bottom: 2rem;
+  }
+
+  .contact-links {
+    display: flex;
+    flex-direction: column;
+    gap: 0.7rem;
+    align-items: center;
+  }
+
+  .contact-link {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.85rem;
+    color: var(--muted);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    transition: color 0.2s;
+    letter-spacing: 0.03em;
+  }
+
+  .contact-link:hover { color: var(--itau-orange); }
+
+  /* ── FOOTER ── */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 2rem 3rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--muted);
+    letter-spacing: 0.05em;
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 768px) {
+    nav { padding: 1rem 1.5rem; }
+    .nav-links { display: none; }
+    .hero { padding: 5rem 1.5rem 3rem; }
+    section { padding: 4rem 1.5rem; }
+    footer { padding: 1.5rem; flex-direction: column; gap: 0.5rem; text-align: center; }
+    .contact-card { padding: 2rem 1.5rem; }
+  }
+
+  /* ── SCROLL REVEAL ── */
+  .reveal {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: all 0.6s ease;
+  }
+
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* ── ITAÚ BANNER ── */
+  .itau-banner {
+    background: linear-gradient(135deg, rgba(247, 118, 0, 0.07), rgba(0, 61, 122, 0.09));
+    border: 1px solid rgba(247, 118, 0, 0.22);
+    border-radius: 10px;
+    padding: 1rem 1.5rem;
+    margin-bottom: 3rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    font-size: 0.88rem;
+    color: #8090b0;
+  }
+
+  .itau-banner strong {
+    color: var(--itau-orange);
+    font-family: 'Syne', sans-serif;
+    font-size: 0.95rem;
+  }
+
+  .match-score {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--itau-orange);
+    background: rgba(247, 118, 0, 0.08);
+    border: 1px solid rgba(247, 118, 0, 0.28);
+    padding: 0.3rem 0.8rem;
+    border-radius: 100px;
+    margin-bottom: 2rem;
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">GB.</div>
+  <ul class="nav-links">
+    <li><a href="#story">Trajetória</a></li>
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#match">Match Itaú</a></li>
+    <li><a href="#contact">Contato</a></li>
+  </ul>
+  <a href="mailto:gabrielbifon5@gmail.com" class="nav-cta">Entre em contato</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-glow"></div>
+  <div class="hero-glow2"></div>
+  <div class="hero-content">
+    <div class="hero-badge">Aberto a oportunidades</div>
+    <h1 class="hero-name">
+      Gabriel<br>
+      <span>Bifon.</span>
+    </h1>
+    <p class="hero-role">Data Science & Analytics · <em>Itaú Match ✓</em></p>
+    <p class="hero-desc">
+      Graduando em Ciência da Computação com foco em Data Science e Machine Learning. 
+      Conecto análise de dados, modelagem estatística e contexto de negócio — especialmente 
+      em cenários que envolvem risco, eficiência e tomada de decisão sob incerteza.
+    </p>
+    <div class="hero-actions">
+      <a href="#story" class="btn-primary">Ver minha trajetória</a>
+      <a href="#match" class="btn-secondary">Match com Itaú →</a>
+    </div>
+  </div>
+</section>
+
+<!-- STORYTELLING -->
+<section id="story">
+  <div class="container">
+    <div class="section-label">Trajetória</div>
+    <h2 class="section-title">Uma história<br>de dados e impacto.</h2>
+    <p class="section-subtitle">
+      Cada etapa moldou um olhar analítico único — da sala de aula ao cliente global.
+    </p>
+
+    <div class="timeline">
+
+      <div class="timeline-item">
+        <div class="tl-period">2021 – 2023</div>
+        <div class="tl-title">O começo: fundação técnica sólida</div>
+        <div class="tl-company">Senac · Técnico em Informática</div>
+        <div class="tl-text">
+          Tudo começou com uma curiosidade genuína por tecnologia. No Senac, aprendi os 
+          fundamentos que ninguém te ensina depois: SQL desde o zero, administração de 
+          servidores Windows, Linux e a lógica por trás da automação com Python. 
+          Mais do que técnica, foi onde desenvolvi o pensamento sistemático de quem 
+          precisa resolver problemas reais com ferramentas reais.
+        </div>
+        <div class="tl-tags">
+          <span class="tag">SQL</span>
+          <span class="tag">Python</span>
+          <span class="tag">Linux</span>
+          <span class="tag">Office 365</span>
+          <span class="tag">Windows Server</span>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="tl-period">2023 – Atual</div>
+        <div class="tl-title">Ciência da Computação: dados em escala</div>
+        <div class="tl-company">SPTECH · Foco em Machine Learning & Reconhecimento de Padrões</div>
+        <div class="tl-text">
+          Na graduação, fui além da teoria. Em projetos reais com AWS, ETL/ELT, 
+          Grafana e análise preditiva, aprendi que dado sem contexto é ruído — 
+          e dado com contexto é poder. O projeto <strong>Elder Care</strong> monitorou saúde 
+          de idosos em tempo real. O <strong>Rise</strong> conectou ONGs a pessoas em situação de rua 
+          via geolocalização. O <strong>TechIdeas</strong> criou dashboards de KPIs correlacionados 
+          em múltiplas plataformas. Cada projeto foi um laboratório de dados aplicado a 
+          impacto social.
+        </div>
+        <div class="tl-tags">
+          <span class="tag highlight">AWS</span>
+          <span class="tag highlight">ETL/ELT</span>
+          <span class="tag">React</span>
+          <span class="tag">Jupyter</span>
+          <span class="tag">Grafana</span>
+          <span class="tag">Python</span>
+          <span class="tag">R</span>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="tl-period">Mar – Out 2024</div>
+        <div class="tl-title">Primeiro passo na Accenture: dados e inovação</div>
+        <div class="tl-company">Accenture · IT Innovation Intern</div>
+        <div class="tl-text">
+          Minha entrada no mercado corporativo foi direto no coração da inovação. 
+          Desenvolvi uma calculadora de carbono rodando em AWS EC2 com Linux Server, 
+          construí dashboards em Power BI para geração de insights de sustentabilidade 
+          e entreguei análises acionáveis para stakeholders. Foi aqui que entendi 
+          a diferença entre visualizar dados e contar histórias com dados.
+        </div>
+        <div class="tl-tags">
+          <span class="tag highlight">Power BI</span>
+          <span class="tag highlight">AWS EC2</span>
+          <span class="tag">JavaScript</span>
+          <span class="tag">Linux</span>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="tl-period">Out 2024 – Jun 2025</div>
+        <div class="tl-title">Cliente global: risco, compliance e dados em produção</div>
+        <div class="tl-company">Accenture · SAP Security Intern</div>
+        <div class="tl-text">
+          O salto para projetos internacionais foi intenso — e exatamente o que eu precisava. 
+          Atuei em dois clientes (farmacêutico e energia), elaborando requisitos funcionais, 
+          análises preventivas de risco de acesso (SoD) e suporte em SIT, UAT e Go-Live 
+          com alto volume de incidentes. Aprendi que dados de acesso errado custam caro — 
+          e que análise preventiva é o diferencial entre caos e controle.
+        </div>
+        <div class="tl-tags">
+          <span class="tag">SAP Security</span>
+          <span class="tag">SoD Analysis</span>
+          <span class="tag">UAT/SIT</span>
+          <span class="tag">Compliance</span>
+          <span class="tag highlight">SQL</span>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="tl-period">Jun 2025 – Atual</div>
+        <div class="tl-title">Analista Júnior: resultados mensuráveis</div>
+        <div class="tl-company">Accenture · SAP Security Junior Analyst</div>
+        <div class="tl-text">
+          Promovido para Analista Júnior, passei a liderar análises de dados de risco (SoD) 
+          com SQL avançado, identificando padrões que reduziram em ~30% as inconsistências 
+          durante UAT e Cutover. Otimizei o fluxo de requisições de acesso (ARM), 
+          estruturei documentação de processos e transformei dados complexos em insights 
+          claros para stakeholders. Cada análise tem um impacto direto no negócio — 
+          e é assim que gosto de trabalhar.
+        </div>
+        <div class="tl-tags">
+          <span class="tag highlight">SQL Avançado</span>
+          <span class="tag highlight">Data Analysis</span>
+          <span class="tag">Risk Management</span>
+          <span class="tag">Documentação</span>
+          <span class="tag">Stakeholders</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- SKILLS DASHBOARD -->
+<section id="skills">
+  <div class="container">
+    <div class="section-label">Dashboard de Skills</div>
+    <h2 class="section-title">Hard &amp; Soft Skills.</h2>
+    <p class="section-subtitle">Uma visão rápida das ferramentas e competências que trago para cada análise.</p>
+
+    <div class="skills-grid">
+
+      <!-- SQL & Dados -->
+      <div class="skill-card">
+        <div class="skill-card-header">
+          <div class="skill-icon" style="background: rgba(247,118,0,0.1);">📊</div>
+          <div class="skill-card-title">SQL & Análise de Dados</div>
+        </div>
+        <div class="skill-items">
+          <div class="skill-bar-row">
+            <div class="skill-bar-label"><span>SQL (Extração & Cruzamento)</span><span>Uso diário</span></div>
+            <div class="skill-bar-track"><div class="skill-bar-fill" data-width="90" style="background: linear-gradient(90deg, #f77600, #ff9533);"></div></div>
+          </div>
+          <div class="skill-bar-row">
+            <div class="skill-bar-label"><span>EDA & Análise Exploratória</span><span>Projetos acadêmicos e profissionais</span></div>
+            <div class="skill-bar-track"><div class="skill-bar-fill" data-width="85" style="background: linear-gradient(90deg, #f77600, #ff9533);"></div></div>
+          </div>
+          <div class="skill-bar-row">
+            <div class="skill-bar-label"><span>ETL / ELT (pipelines de dados)</span><span>End-to-end em AWS</span></div>
+            <div class="skill-bar-track"><div class="skill-bar-fill" data-width="82" style="background: linear-gradient(90deg, #f77600, #ff9533);"></div></div>
+          </div>
+          <div class="skill-bar-row">
+            <div class="skill-bar-label"><span>Machine Learning (KNN, DT, PCA)</span><span>Projetos de classificação e padrões</span></div>
+            <div class="skill-bar-track"><div class="skill-bar-fill" data-width="70" style="background: linear-gradient(90deg, #f77600, #ff9533);"></div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- AWS -->
+      <div class="skill-card">
+        <div class="skill-card-header">
+          <div class="skill-icon" style="background: rgba(0,61,122,0.15);">☁️</div>
+          <div class="skill-card-title">AWS Cloud</div>
+        </div>
+        <div class="skill-items">
+          <div class="skill-bar-row">
+            <div class="skill-bar-label"><span>Athena (queries em S3)</span><span>Pipelines e análises</span></div>
+            <div class="skill-bar-track"><div class="skill-bar-fill" data-width="86" style="background: linear-gradient(90deg, #003d7a, #1a5fa8);"></div></div>
+          </div>
+          <div class="skill-bar-row">
+            <div class="skill-bar-label"><span>QuickSight (dashboards)</span><span>Visualizações executivas</span></div>
+            <div class="skill-bar-track"><div class="skill-bar-fill" data-width="83" style="background: linear-gradient(90deg, #003d7a, #1a5fa8);"></div></div>
+          </div>
+          <div class="skill-bar-row">
+            <div class="skill-bar-label"><span>S3, Glue, Lambda</span><span>Automação e armazenamento</span></div>
+            <div class="skill-bar-track"><div class="skill-bar-fill" data-width="76" style="background: linear-gradient(90deg, #003d7a, #1a5fa8);"></div></div>
+          </div>
+          <div class="skill-bar-row">
+            <div class="skill-bar-label"><span>EC2 & Jupyter na nuvem</span><span>Projetos acadêmicos</span></div>
+            <div class="skill-bar-track"><div class="skill-bar-fill" data-width="72" style="background: linear-gradient(90deg, #003d7a, #1a5fa8);"></div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Visualização -->
+      <div class="skill-card">
+        <div class="skill-card-header">
+          <div class="skill-icon" style="background: rgba(247,118,0,0.08);">📈</div>
+          <div class="skill-card-title">Visualização & Apresentação</div>
+        </div>
+        <div class="skill-items">
+          <div class="skill-bar-row">
+            <div class="skill-bar-label"><span>Excel (análises e planilhas)</span><span>Análises extensas no dia a dia</span></div>
+            <div class="skill-bar-track"><div class="skill-bar-fill" data-width="93" style="background: linear-gradient(90deg, #f77600, #1a5fa8);"></div></div>
+          </div>
+          <div class="skill-bar-row">
+            <div class="skill-bar-label"><span>Power BI (dashboards)</span><span>Insights para stakeholders</span></div>
+            <div class="skill-bar-track"><div class="skill-bar-fill" data-width="88" style="background: linear-gradient(90deg, #f77600, #1a5fa8);"></div></div>
+          </div>
+          <div class="skill-bar-row">
+            <div class="skill-bar-label"><span>PowerPoint executivo</span><span>Apresentações para clientes globais</span></div>
+            <div class="skill-bar-track"><div class="skill-bar-fill" data-width="90" style="background: linear-gradient(90deg, #f77600, #1a5fa8);"></div></div>
+          </div>
+          <div class="skill-bar-row">
+            <div class="skill-bar-label"><span>Matplotlib & Seaborn</span><span>EDA e relatórios em Python</span></div>
+            <div class="skill-bar-track"><div class="skill-bar-fill" data-width="82" style="background: linear-gradient(90deg, #f77600, #1a5fa8);"></div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Python & R -->
+      <div class="skill-card">
+        <div class="skill-card-header">
+          <div class="skill-icon" style="background: rgba(0,61,122,0.12);">🐍</div>
+          <div class="skill-card-title">Python & R</div>
+        </div>
+        <div class="skill-items">
+          <div class="skill-bar-row">
+            <div class="skill-bar-label"><span>Pandas & NumPy</span><span>Manipulação e análise de dados</span></div>
+            <div class="skill-bar-track"><div class="skill-bar-fill" data-width="88" style="background: linear-gradient(90deg, #1a5fa8, #003d7a);"></div></div>
+          </div>
+          <div class="skill-bar-row">
+            <div class="skill-bar-label"><span>Scikit-learn (KNN, DT, PCA)</span><span>Classificação e reconhecimento de padrões</span></div>
+            <div class="skill-bar-track"><div class="skill-bar-fill" data-width="72" style="background: linear-gradient(90deg, #1a5fa8, #003d7a);"></div></div>
+          </div>
+          <div class="skill-bar-row">
+            <div class="skill-bar-label"><span>Linguagem R</span><span>Modelagem estatística</span></div>
+            <div class="skill-bar-track"><div class="skill-bar-fill" data-width="68" style="background: linear-gradient(90deg, #1a5fa8, #003d7a);"></div></div>
+          </div>
+          <div class="skill-bar-row">
+            <div class="skill-bar-label"><span>Shell Script & PowerShell</span><span>Automação e administração</span></div>
+            <div class="skill-bar-track"><div class="skill-bar-fill" data-width="65" style="background: linear-gradient(90deg, #1a5fa8, #003d7a);"></div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Idiomas -->
+      <div class="skill-card">
+        <div class="skill-card-header">
+          <div class="skill-icon" style="background: rgba(247,118,0,0.08);">🌐</div>
+          <div class="skill-card-title">Idiomas</div>
+        </div>
+        <div class="skill-items">
+          <div class="skill-bar-row">
+            <div class="skill-bar-label"><span>Português</span><span>Nativo</span></div>
+            <div class="skill-bar-track"><div class="skill-bar-fill" data-width="100" style="background: linear-gradient(90deg, #f77600, #ff9533);"></div></div>
+          </div>
+          <div class="skill-bar-row">
+            <div class="skill-bar-label"><span>Inglês</span><span>Clientes internacionais</span></div>
+            <div class="skill-bar-track"><div class="skill-bar-fill" data-width="87" style="background: linear-gradient(90deg, #f77600, #ff9533);"></div></div>
+          </div>
+          <div class="skill-bar-row">
+            <div class="skill-bar-label"><span>Espanhol</span><span>Projetos internacionais</span></div>
+            <div class="skill-bar-track"><div class="skill-bar-fill" data-width="83" style="background: linear-gradient(90deg, #f77600, #ff9533);"></div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Soft Skills -->
+      <div class="skill-card">
+        <div class="skill-card-header">
+          <div class="skill-icon" style="background: rgba(0,61,122,0.12);">🧠</div>
+          <div class="skill-card-title">Soft Skills</div>
+        </div>
+        <div class="soft-pills">
+          <span class="soft-pill">Pensamento Analítico</span>
+          <span class="soft-pill">Resolução de Problemas</span>
+          <span class="soft-pill">Validação de Dados</span>
+          <span class="soft-pill">Otimização de Processos</span>
+          <span class="soft-pill">Trabalho Sob Pressão</span>
+          <span class="soft-pill">Flexibilidade</span>
+          <span class="soft-pill">Trabalho em Equipe</span>
+          <span class="soft-pill">Ética & Respeito</span>
+          <span class="soft-pill">Busca Por Impacto Na Sociedade</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- MATCH ITAÚ -->
+<section id="match">
+  <div class="container">
+    <div class="section-label">Candidatura</div>
+    <h2 class="section-title reveal">Por que eu sou o<br>candidato certo para o Itaú?</h2>
+
+    <div class="itau-banner reveal">
+      <span>🏦</span>
+      <div>
+        Candidatura para: <strong>Analista de Dados e Analytics Júnior — Itaú Unibanco</strong>
+        <br>Experiência do cliente · Insights analíticos · SQL · AWS Athena & QuickSight
+      </div>
+    </div>
+
+    <div class="match-score reveal">✓ Alto nível de aderência à vaga</div>
+
+    <div class="match-grid">
+
+      <div class="match-item">
+        <div class="match-check">✓</div>
+        <div class="match-text">
+          <strong>SQL para extração e cruzamento de dados</strong>
+          <p>Uso SQL diariamente na Accenture para analisar grandes volumes de dados de risco, identificando padrões e reduzindo ~30% de inconsistências.</p>
+        </div>
+      </div>
+
+      <div class="match-item">
+        <div class="match-check">✓</div>
+        <div class="match-text">
+          <strong>AWS Athena & QuickSight</strong>
+          <p>Vivência com todo o ecossistema AWS: Athena para queries em S3, QuickSight para dashboards, Glue para pipelines — alinhado 100% ao requisito.</p>
+        </div>
+      </div>
+
+      <div class="match-item">
+        <div class="match-check">✓</div>
+        <div class="match-text">
+          <strong>Dashboards analíticos</strong>
+          <p>Construção de Power BI com insights de negócio na Accenture IT Innovation. Transformo dados em visualizações que facilitam decisões estratégicas.</p>
+        </div>
+      </div>
+
+      <div class="match-item">
+        <div class="match-check">✓</div>
+        <div class="match-text">
+          <strong>Excel e PowerPoint avançados</strong>
+          <p>Uso avançado declarado no currículo. Aplicado em relatórios executivos, análises de planilhas extensas e apresentações para stakeholders globais.</p>
+        </div>
+      </div>
+
+      <div class="match-item">
+        <div class="match-check">✓</div>
+        <div class="match-text">
+          <strong>Geração de insights para o negócio</strong>
+          <p>Experiência documentando processos e transformando dados complexos (SoD/SAP) em insights claros que apoiam decisões de lideranças.</p>
+        </div>
+      </div>
+
+      <div class="match-item">
+        <div class="match-check">✓</div>
+        <div class="match-text">
+          <strong>Análises recorrentes e estudos exploratórios</strong>
+          <p>Suporte em ciclos de UAT, SIT e Go-Live — experiência com análises contínuas e alta demanda, sob pressão e com foco em qualidade.</p>
+        </div>
+      </div>
+
+      <div class="match-item">
+        <div class="match-check">✓</div>
+        <div class="match-text">
+          <strong>Apresentações executivas com contexto de negócio</strong>
+          <p>Construção de relatórios e insights que conectam dados ao contexto do negócio, comunicando com clareza para stakeholders de diferentes perfis.</p>
+        </div>
+      </div>
+
+      <div class="match-item">
+        <div class="match-check">✓</div>
+        <div class="match-text">
+          <strong>Pluralidade e colaboração</strong>
+          <p>Atuação em projetos internacionais com times multiculturais, clientes em inglês e espanhol — alinhado aos valores de diversidade do Itaú.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="container">
+    <div class="contact-card reveal">
+      <div class="section-label" style="justify-content: center; margin-bottom: 1rem;">Contato</div>
+      <div class="contact-title">Vamos conversar?</div>
+      <div class="contact-sub">São Paulo, Brasil</div>
+      <div class="contact-links">
+        <a href="tel:+5511988930277" class="contact-link">
+          <span>📱</span> (11) 98893-0277
+        </a>
+        <a href="mailto:gabrielbifon5@gmail.com" class="contact-link">
+          <span>✉️</span> gabrielbifon5@gmail.com
+        </a>
+        <a href="https://www.linkedin.com/in/gabrielbifon" target="_blank" class="contact-link">
+          <span>💼</span> linkedin.com/in/gabrielbifon
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <span>Gabriel Bifon de Souza · 2026</span>
+  <span>Analista de Dados · São Paulo</span>
+</footer>
+
+<script>
+  // Intersection Observer para animações
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        // Animar barras de skill
+        const bars = entry.target.querySelectorAll('.skill-bar-fill');
+        bars.forEach(bar => {
+          const w = bar.getAttribute('data-width');
+          if (w) bar.style.width = w + '%';
+        });
+      }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll(
+    '.timeline-item, .skill-card, .match-item, .reveal'
+  ).forEach(el => observer.observe(el));
+
+  // Animar barras quando skill cards ficam visíveis
+  const skillObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        setTimeout(() => {
+          entry.target.querySelectorAll('.skill-bar-fill').forEach(bar => {
+            const w = bar.getAttribute('data-width');
+            if (w) bar.style.width = w + '%';
+          });
+        }, 200);
+      }
+    });
+  }, { threshold: 0.3 });
+
+  document.querySelectorAll('.skill-card').forEach(el => skillObserver.observe(el));
+
+  // Stagger delay para match items
+  document.querySelectorAll('.match-item').forEach((el, i) => {
+    el.style.transitionDelay = (i * 0.07) + 's';
+    observer.observe(el);
+  });
+
+  // Stagger delay para timeline
+  document.querySelectorAll('.timeline-item').forEach((el, i) => {
+    el.style.transitionDelay = (i * 0.1) + 's';
+  });
+</script>
+
+</body>
+</html>
